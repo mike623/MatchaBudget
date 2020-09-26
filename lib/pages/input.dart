@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 
 import '../const.dart';
 
@@ -14,6 +19,7 @@ class SecondRoute extends StatefulWidget {
 class _SecondRouteState extends State<SecondRoute> {
   DateTime date = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
+  Prediction place;
 
   void dateValueChange(DateTime datetime) {
     return setState(() {
@@ -24,6 +30,12 @@ class _SecondRouteState extends State<SecondRoute> {
   void timeValueChange(TimeOfDay value) {
     return setState(() {
       timeOfDay = value;
+    });
+  }
+
+  FutureOr<Prediction> onPlaceSet(Prediction value) {
+    setState(() {
+      place = value;
     });
   }
 
@@ -65,6 +77,32 @@ class _SecondRouteState extends State<SecondRoute> {
                       .then(timeValueChange);
                 },
                 child: Text('$dateString ${timeOfDay.format(context)}'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  Position position = await getCurrentPosition();
+                  if (position == null) return;
+                  var location =
+                      Location(position.latitude, position.longitude);
+                  print(location);
+                  Prediction prediction = await PlacesAutocomplete.show(
+                          context: context,
+                          apiKey: kGoogleApiKey,
+                          mode: Mode.fullscreen, // Mode.overlay
+                          language: "en",
+                          radius: 1000,
+                          location: location,
+                          components: [Component(Component.country, "gb")])
+                      .then(onPlaceSet);
+                },
+                child: FractionallySizedBox(
+                  widthFactor: 0.5,
+                  child: Text(
+                    place?.description ?? 'Location',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black.withOpacity(0.5)),
+                  ),
+                ),
               ),
               Container(height: 15),
               FractionallySizedBox(

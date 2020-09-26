@@ -57,3 +57,5 @@ CatIcon getCatIconByName(name) {
     bgColor: cat.bgColor,
   );
 }
+
+const kGoogleApiKey = "AIzaSyB0q4y4oIq_VznpdX26NtOnvCYWbYDdEXg";

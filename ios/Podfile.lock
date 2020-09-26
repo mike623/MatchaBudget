@@ -1,21 +1,21 @@
 PODS:
   - Flutter (1.0.0)
-  - hexcolor (0.0.1):
+  - "geolocator (6.0.0+4)":
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - hexcolor (from `.symlinks/plugins/hexcolor/ios`)
+  - geolocator (from `.symlinks/plugins/geolocator/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  hexcolor:
-    :path: ".symlinks/plugins/hexcolor/ios"
+  geolocator:
+    :path: ".symlinks/plugins/geolocator/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
+  geolocator: 1ae40084cc6c1586ce5ad12cfc3fd38c64d05f2f
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
