@@ -94,9 +94,8 @@ class _SecondRouteState extends State<SecondRoute> {
               alignment: Alignment.bottomCenter,
               child: FlatButton(
                 color: blue4,
-                onPressed: () => {
-                  // Navigator.of(context).popUntil((route) => false)
-                },
+                onPressed: () =>
+                    {Navigator.popUntil(context, ModalRoute.withName('/'))},
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
