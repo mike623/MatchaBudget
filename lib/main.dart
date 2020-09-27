@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: "Nunito"
       ),
       home: MyHomePage(title: 'Hello!'),
     );
@@ -52,12 +53,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           margin: EdgeInsets.only(bottom: 20),
                           child: Text(
                             "October",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
                           )),
                       Container(
                           child: Text(
                         "\$5,650",
                         style: TextStyle(
+                            fontStyle: FontStyle.normal,
                             color: Colors.white,
                             fontSize: 60,
                             fontWeight: FontWeight.bold),
