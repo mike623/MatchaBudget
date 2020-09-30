@@ -1,4 +1,5 @@
 import 'package:SimpleBudget/models/expends.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,12 +9,9 @@ import 'const.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await Hive.close();
   Hive.registerAdapter(ExpendsAdapter());
+  await openExpends();
   runApp(MyApp());
-  print(listExpend().asStream().forEach((element) {
-    print(element);
-  }));
 }
 
 class MyApp extends StatelessWidget {
@@ -169,9 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   EdgeInsets.only(right: 20),
                                               child: Text("Expense"),
                                             ),
-                                            Container(
-                                              child: Text("Expense"),
-                                            )
                                           ],
                                         ),
                                       ),
@@ -185,15 +180,37 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               Expanded(
                                 flex: 1,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      ExpendListTitle(),
-                                      ExpendListTitle(),
-                                      ExpendListTitle(),
-                                    ],
-                                  ),
+                                child: ValueListenableBuilder(
+                                  valueListenable: listenExpend(),
+                                  builder: (context, box, widget) {
+                                    Map<dynamic, dynamic> raw = box.toMap();
+                                    var list = raw.values.toList().where(
+                                        (element) => element.catName != null);
+                                    print(list);
+                                    var newList =
+                                        groupBy(list, (obj) => obj.catName);
+                                    print(newList.values);
+                                    print(newList.keys);
+                                    return ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      itemCount: newList.length,
+                                      itemBuilder: (context, index) {
+                                        var catName =
+                                            newList.keys.elementAt(index);
+                                        var listOfExpends =
+                                            newList.values.elementAt(index);
+                                        var sum = listOfExpends
+                                            .map((e) => double.parse(e.price))
+                                            .reduce((value, element) =>
+                                                value + element);
+                                        return ExpendListTitle(
+                                          catName: catName,
+                                          desc: sum.toString(),
+                                        );
+                                      },
+                                      // children: list,
+                                    );
+                                  },
                                 ),
                               )
                             ],

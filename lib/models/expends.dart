@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 part 'expends.g.dart';
 
@@ -31,4 +32,12 @@ var listExpend = () async {
 var deleteExpend = (key) async {
   var expends = await Hive.openBox('expends');
   return expends.delete(key);
+};
+
+var listenExpend = () {
+  return Hive.box('expends').listenable();
+};
+
+var openExpends = () async {
+  return await Hive.openBox('expends');
 };

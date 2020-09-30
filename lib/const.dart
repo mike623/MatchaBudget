@@ -58,4 +58,9 @@ CatIcon getCatIconByName(name) {
   );
 }
 
+IconData getIconByName(name) {
+  var cat = CAT_LIST.firstWhere((element) => element.name == name);
+  return cat.icon;
+}
+
 const kGoogleApiKey = "AIzaSyB0q4y4oIq_VznpdX26NtOnvCYWbYDdEXg";

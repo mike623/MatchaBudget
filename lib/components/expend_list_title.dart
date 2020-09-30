@@ -2,8 +2,13 @@ import 'package:SimpleBudget/const.dart';
 import 'package:flutter/material.dart';
 
 class ExpendListTitle extends StatelessWidget {
+  final catName;
+  final desc;
+
   const ExpendListTitle({
     Key key,
+    this.catName = "",
+    this.desc = ""
   }) : super(key: key);
 
   @override
@@ -20,7 +25,7 @@ class ExpendListTitle extends StatelessWidget {
           Positioned.fill(
             child: Align(
               child: Icon(
-                Icons.shopping_cart,
+                getIconByName(catName),
                 size: 16,
               ),
               alignment: Alignment.center,
@@ -28,8 +33,8 @@ class ExpendListTitle extends StatelessWidget {
           )
         ],
       ),
-      title: Text("asda"),
-      subtitle: Text("asdasd"),
+      title: Text(catName),
+      subtitle: Text(desc),
     );
   }
 }
