@@ -1,10 +1,19 @@
+import 'package:SimpleBudget/models/expends.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import './pages/cateory_list.dart';
 import './components/expend_list_title.dart';
 import 'const.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.close();
+  Hive.registerAdapter(ExpendsAdapter());
   runApp(MyApp());
+  print(listExpend().asStream().forEach((element) {
+    print(element);
+  }));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,10 +23,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: "Nunito"
-      ),
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: "Nunito"),
       home: MyHomePage(title: 'Hello!'),
     );
   }

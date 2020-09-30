@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:SimpleBudget/models/expends.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,7 @@ class SecondRoute extends StatefulWidget {
 
 class _SecondRouteState extends State<SecondRoute> {
   DateTime date = DateTime.now();
-  TimeOfDay timeOfDay = TimeOfDay.now();
+  String price;
   Prediction place;
 
   void dateValueChange(DateTime datetime) {
@@ -29,7 +30,15 @@ class _SecondRouteState extends State<SecondRoute> {
 
   void timeValueChange(TimeOfDay value) {
     return setState(() {
-      timeOfDay = value;
+      var finalDate = new DateTime(
+          date.year, date.month, date.day, value.hour, value.minute);
+      date = finalDate;
+    });
+  }
+
+  void onPriceChanged(String value) {
+    setState(() {
+      price = value;
     });
   }
 
@@ -41,8 +50,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
   @override
   Widget build(BuildContext context) {
-    var dateString = new DateFormat.yMMMd().format(date ??= DateTime.now());
-    print(timeOfDay);
+    var dateString =
+        new DateFormat.yMMMd().add_jm().format(date ??= DateTime.now());
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -76,7 +85,7 @@ class _SecondRouteState extends State<SecondRoute> {
                           context: context, initialTime: TimeOfDay.now())
                       .then(timeValueChange);
                 },
-                child: Text('$dateString ${timeOfDay.format(context)}'),
+                child: Text('$dateString'),
               ),
               FlatButton(
                 onPressed: () async {
@@ -84,8 +93,7 @@ class _SecondRouteState extends State<SecondRoute> {
                   if (position == null) return;
                   var location =
                       Location(position.latitude, position.longitude);
-                  print(location);
-                  Prediction prediction = await PlacesAutocomplete.show(
+                  await PlacesAutocomplete.show(
                           context: context,
                           apiKey: kGoogleApiKey,
                           mode: Mode.fullscreen, // Mode.overlay
@@ -108,6 +116,7 @@ class _SecondRouteState extends State<SecondRoute> {
               FractionallySizedBox(
                 widthFactor: 0.6,
                 child: TextField(
+                  onChanged: this.onPriceChanged,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 60,
@@ -132,8 +141,7 @@ class _SecondRouteState extends State<SecondRoute> {
               alignment: Alignment.bottomCenter,
               child: FlatButton(
                 color: blue4,
-                onPressed: () =>
-                    {Navigator.popUntil(context, ModalRoute.withName('/'))},
+                onPressed: this.onSubmit,
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
@@ -148,5 +156,10 @@ class _SecondRouteState extends State<SecondRoute> {
         ],
       )),
     );
+  }
+
+  void onSubmit() {
+    addExpend(Expends(date, price, place.placeId, widget.cat));
+    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }
