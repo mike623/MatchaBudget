@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 import '../const.dart';
 
@@ -18,6 +19,11 @@ class SecondRoute extends StatefulWidget {
 }
 
 class _SecondRouteState extends State<SecondRoute> {
+  KeyboardVisibilityNotification _keyboardVisibility =
+      new KeyboardVisibilityNotification();
+  int _keyboardVisibilitySubscriberId;
+  bool _keyboardState;
+
   DateTime date = DateTime.now();
   String price;
   Prediction place;
@@ -47,8 +53,24 @@ class _SecondRouteState extends State<SecondRoute> {
     });
   }
 
+  @protected
+  void initState() {
+    super.initState();
+
+    _keyboardState = _keyboardVisibility.isKeyboardVisible;
+
+    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardState = visible;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isValid = formValid();
     var dateString =
         new DateFormat.yMMMd().add_jm().format(date ??= DateTime.now());
     return Scaffold(
@@ -138,16 +160,20 @@ class _SecondRouteState extends State<SecondRoute> {
             margin: EdgeInsets.only(bottom: 30),
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: FlatButton(
-                color: blue4,
-                onPressed: this.onSubmit,
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(color: blue2)),
-                child: Text(
-                  'Done',
-                  style: TextStyle(fontSize: 30, color: Colors.white),
+              child: Visibility(
+                visible: !_keyboardState,
+                child: FlatButton(
+                  color: blue4,
+                  disabledColor: Colors.grey.shade300,
+                  onPressed: isValid ? this.onSubmit : null,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: BorderSide(color: blue2)),
+                  child: Text(
+                    'Done',
+                    style: TextStyle(fontSize: 30, color: Colors.white),
+                  ),
                 ),
               ),
             ),
@@ -161,5 +187,9 @@ class _SecondRouteState extends State<SecondRoute> {
     addExpend(
         Expends(date, price, place.placeId, widget.cat, place.description));
     Navigator.popUntil(context, ModalRoute.withName('/'));
+  }
+
+  bool formValid() {
+    return price != null && price != "" && place != null;
   }
 }

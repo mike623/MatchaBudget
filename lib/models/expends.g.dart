@@ -21,13 +21,14 @@ class ExpendsAdapter extends TypeAdapter<Expends> {
       fields[1] as String,
       fields[2] as String,
       fields[3] as String,
+      fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Expends obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.date)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class ExpendsAdapter extends TypeAdapter<Expends> {
       ..writeByte(2)
       ..write(obj.placeId)
       ..writeByte(3)
-      ..write(obj.catName);
+      ..write(obj.catName)
+      ..writeByte(4)
+      ..write(obj.placeDesc);
   }
 
   @override

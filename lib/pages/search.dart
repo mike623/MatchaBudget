@@ -36,7 +36,7 @@ class SearchPage extends SearchDelegate {
           dense: false,
           onTap: () {},
           title: Text(item.price.toString()),
-          subtitle: Text(item.catName.toString()),
+          subtitle: Text(item.placeDesc.toString()),
           leading: Container(
               width: 40, height: 80, child: Icon(getIconByName(item.catName))),
         );
