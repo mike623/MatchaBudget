@@ -1,6 +1,7 @@
 import 'package:SimpleBudget/const.dart';
 import 'package:SimpleBudget/models/expends.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends SearchDelegate {
@@ -35,8 +36,13 @@ class SearchPage extends SearchDelegate {
         return ListTile(
           dense: false,
           onTap: () {},
-          title: Text(item.price.toString()),
-          subtitle: Text(item.placeDesc.toString()),
+          title: Text("£" + item.price.toString()),
+          subtitle: Text(
+            DateFormat.yMMMEd().format(item.date).toString() +
+                " @ " +
+                item.placeDesc.toString(),
+            overflow: TextOverflow.ellipsis,
+          ),
           leading: Container(
               width: 40, height: 80, child: Icon(getIconByName(item.catName))),
         );

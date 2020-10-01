@@ -78,8 +78,7 @@ class ExpendsSrv {
 
   Iterable<dynamic> searchBy(String query) {
     var v = box.values;
-    return v
-        .where((element) => element.catName != null)
-        .where((element) => RegExp(query).hasMatch(element.price.toString()));
+    return v.where((element) => element.catName != null).where((element) =>
+        RegExp(query).hasMatch(element.price.toString() + element.placeDesc));
   }
 }
