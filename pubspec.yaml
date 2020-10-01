@@ -36,6 +36,7 @@ dependencies:
   hive: ^1.4.4
   hive_flutter: ^0.3.1
   collection: ^1.14.13
+  provider: ^4.3.2+2
 
 dev_dependencies:
   flutter_test:

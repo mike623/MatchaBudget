@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -41,3 +42,34 @@ var listenExpend = () {
 var openExpends = () async {
   return await Hive.openBox('expends');
 };
+
+class ExpendsSrv {
+  Box box;
+
+  ExpendsSrv(this.box);
+
+  void log() async {
+    print(box.values.toList());
+  }
+
+  Map<dynamic, List<dynamic>> getGroupExpends(box) {
+    Map<dynamic, dynamic> raw = box.toMap();
+    var list = raw.values.toList().where((element) => element.catName != null);
+    var newList = groupBy(list, (obj) => obj.catName);
+    return newList;
+  }
+
+  Map getCatExpendsInfo(newList, index) {
+    var catName = newList.keys.elementAt(index);
+    var listOfExpends = newList.values.elementAt(index);
+    var sum = listOfExpends
+        .map((e) => double.parse(e.price))
+        .reduce((value, element) => value + element);
+    var result = {
+      "catName": catName,
+      "listOfExpends": listOfExpends,
+      "sum": sum
+    };
+    return result;
+  }
+}

@@ -1,8 +1,8 @@
 import 'package:SimpleBudget/models/expends.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import './pages/cateory_list.dart';
 import './components/expend_list_title.dart';
 import 'const.dart';
@@ -18,13 +18,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          fontFamily: "Nunito"),
-      home: MyHomePage(title: 'Hello!'),
+    return MultiProvider(
+      providers: [
+        FutureProvider<Box>(create: (_) => openExpends()),
+        ProxyProvider<Box, ExpendsSrv>(
+            update: (BuildContext context, Box box, ExpendsSrv expendsSrv) =>
+                ExpendsSrv(box)),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            fontFamily: "Nunito"),
+        home: MyHomePage(title: 'Hello!'),
+      ),
     );
   }
 }
@@ -183,29 +191,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: ValueListenableBuilder(
                                   valueListenable: listenExpend(),
                                   builder: (context, box, widget) {
-                                    Map<dynamic, dynamic> raw = box.toMap();
-                                    var list = raw.values.toList().where(
-                                        (element) => element.catName != null);
-                                    print(list);
-                                    var newList =
-                                        groupBy(list, (obj) => obj.catName);
-                                    print(newList.values);
-                                    print(newList.keys);
+                                    var srv = Provider.of<ExpendsSrv>(context);
+                                    var newList = srv.getGroupExpends(box);
                                     return ListView.builder(
                                       padding: EdgeInsets.zero,
                                       itemCount: newList.length,
                                       itemBuilder: (context, index) {
-                                        var catName =
-                                            newList.keys.elementAt(index);
-                                        var listOfExpends =
-                                            newList.values.elementAt(index);
-                                        var sum = listOfExpends
-                                            .map((e) => double.parse(e.price))
-                                            .reduce((value, element) =>
-                                                value + element);
+                                        var catExpendsInfo = srv
+                                            .getCatExpendsInfo(newList, index);
                                         return ExpendListTitle(
-                                          catName: catName,
-                                          desc: sum.toString(),
+                                          catName: catExpendsInfo["catName"],
+                                          desc:
+                                              catExpendsInfo["sum"].toString(),
                                         );
                                       },
                                       // children: list,
