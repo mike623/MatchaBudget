@@ -1,5 +1,6 @@
 import 'package:SimpleBudget/components/drawer.dart';
 import 'package:SimpleBudget/models/expends.dart';
+import 'package:SimpleBudget/pages/search.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -258,7 +259,9 @@ class _MyHomePageState extends State<MyHomePage> {
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              showSearch(context: context, delegate: SearchPage());
+            },
           ),
         ],
         leading: Builder(

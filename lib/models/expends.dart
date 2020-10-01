@@ -72,4 +72,11 @@ class ExpendsSrv {
     };
     return result;
   }
+
+  Iterable<dynamic> searchBy(String query) {
+    var v = box.values;
+    return v
+        .where((element) => element.catName != null)
+        .where((element) => RegExp(query).hasMatch(element.price.toString()));
+  }
 }
