@@ -1,3 +1,4 @@
+import 'package:SimpleBudget/components/drawer.dart';
 import 'package:SimpleBudget/models/expends.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -52,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       extendBodyBehindAppBar: true,
       backgroundColor: blue4,
       appBar: buildAppBar(context),
-      drawer: buildListView(context),
+      drawer: MyDrawer(),
       body: Column(
         children: [
           Expanded(
@@ -223,29 +224,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
-  }
-
-  ListView buildListView(BuildContext context) {
-    return ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text('Drawer Header'),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-          ),
-          ListTile(
-            title: Text('Item 1'),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-        ]);
   }
 
   AppBar buildAppBar(BuildContext context) {
