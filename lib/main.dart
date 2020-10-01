@@ -205,10 +205,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class ExpenseList extends StatelessWidget {
+class ExpenseList extends StatefulWidget {
   const ExpenseList({
     Key key,
   }) : super(key: key);
+
+  @override
+  _ExpenseListState createState() => _ExpenseListState();
+}
+
+class _ExpenseListState extends State<ExpenseList> {
+  int sort = 1;
+  void toggleSort() {
+    setState(() {
+      sort = sort * -1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,8 +232,7 @@ class ExpenseList extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(35.0),
-              topRight: Radius.circular(35.0)),
+              topLeft: Radius.circular(35.0), topRight: Radius.circular(35.0)),
         ),
         margin: EdgeInsets.all(0),
         elevation: 10,
@@ -236,15 +247,13 @@ class ExpenseList extends StatelessWidget {
                   flex: 0,
                   child: Container(
                     child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           child: Row(
                             children: [
                               Container(
-                                margin:
-                                    EdgeInsets.only(right: 20),
+                                margin: EdgeInsets.only(right: 20),
                                 child: Text("Expense"),
                               ),
                             ],
@@ -252,7 +261,7 @@ class ExpenseList extends StatelessWidget {
                         ),
                         IconButton(
                           icon: Icon(Icons.sort),
-                          onPressed: () => {},
+                          onPressed: toggleSort
                         )
                       ],
                     ),
@@ -269,12 +278,11 @@ class ExpenseList extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         itemCount: newList.length,
                         itemBuilder: (context, index) {
-                          var catExpendsInfo = srv
-                              .getCatExpendsInfo(newList, index);
+                          var catExpendsInfo =
+                              srv.getCatExpendsInfo(newList, index);
                           return ExpendListTitle(
                             catName: catExpendsInfo["catName"],
-                            desc:
-                                catExpendsInfo["sum"].toString(),
+                            desc: catExpendsInfo["sum"].toString(),
                           );
                         },
                         // children: list,
