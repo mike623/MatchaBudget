@@ -6,7 +6,7 @@ part 'expends.g.dart';
 
 @HiveType(typeId: 1)
 class Expends {
-  Expends(this.date, this.price, this.placeId, this.catName);
+  Expends(this.date, this.price, this.placeId, this.catName, this.placeDesc);
 
   @HiveField(0)
   DateTime date;
@@ -19,6 +19,9 @@ class Expends {
 
   @HiveField(3)
   String catName;
+
+  @HiveField(4)
+  String placeDesc;
 }
 
 var addExpend = (Expends d) async {

@@ -21,7 +21,6 @@ class _SecondRouteState extends State<SecondRoute> {
   DateTime date = DateTime.now();
   String price;
   Prediction place;
-
   void dateValueChange(DateTime datetime) {
     return setState(() {
       date = datetime;
@@ -159,7 +158,8 @@ class _SecondRouteState extends State<SecondRoute> {
   }
 
   void onSubmit() {
-    addExpend(Expends(date, price, place.placeId, widget.cat));
+    addExpend(
+        Expends(date, price, place.placeId, widget.cat, place.description));
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }
