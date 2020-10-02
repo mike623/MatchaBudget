@@ -62,6 +62,22 @@ class ExpendsSrv {
     return newList;
   }
 
+  sumOfExpends(listOfExpends) {
+    var sum = listOfExpends
+        .map((e) => double.parse(e.price))
+        .reduce((value, element) => value + element);
+    return sum;
+  }
+
+  List<Map<String, dynamic>> getGroupExpends2(box, int sort) {
+    Map<dynamic, dynamic> raw = box.toMap();
+    return raw.entries.map((e) {
+      var sum = sumOfExpends(e.value);
+      return {"catName": e.key, "listOfExpends": e.value, "sum": sum};
+    }).toList()
+      ..sort((a, b) => a["price"].toString().compareTo(b["price"].toString()));
+  }
+
   Map getCatExpendsInfo(newList, index) {
     var catName = newList.keys.elementAt(index);
     var listOfExpends = newList.values.elementAt(index);
