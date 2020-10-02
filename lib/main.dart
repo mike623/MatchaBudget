@@ -259,9 +259,10 @@ class _ExpenseListState extends State<ExpenseList> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.sort),
-                          onPressed: toggleSort
+                        RotatedBox(
+                          quarterTurns: sort == 1 ? 2 : 4,
+                          child: IconButton(
+                              icon: Icon(Icons.sort), onPressed: toggleSort),
                         )
                       ],
                     ),
@@ -273,13 +274,12 @@ class _ExpenseListState extends State<ExpenseList> {
                     valueListenable: listenExpend(),
                     builder: (context, box, widget) {
                       var srv = Provider.of<ExpendsSrv>(context);
-                      var newList = srv.getGroupExpends(box);
+                      var ls = srv.getGroupExpends2(box, sort);
                       return ListView.builder(
                         padding: EdgeInsets.zero,
-                        itemCount: newList.length,
+                        itemCount: ls.length,
                         itemBuilder: (context, index) {
-                          var catExpendsInfo =
-                              srv.getCatExpendsInfo(newList, index);
+                          var catExpendsInfo = ls.elementAt(index);
                           return ExpendListTitle(
                             catName: catExpendsInfo["catName"],
                             desc: catExpendsInfo["sum"].toString(),

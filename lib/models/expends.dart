@@ -70,26 +70,21 @@ class ExpendsSrv {
   }
 
   List<Map<String, dynamic>> getGroupExpends2(box, int sort) {
-    Map<dynamic, dynamic> raw = box.toMap();
-    return raw.entries.map((e) {
+    var map = getGroupExpends(box);
+    var rs = map.entries.map((e) {
       var sum = sumOfExpends(e.value);
       return {"catName": e.key, "listOfExpends": e.value, "sum": sum};
-    }).toList()
-      ..sort((a, b) => a["price"].toString().compareTo(b["price"].toString()));
-  }
-
-  Map getCatExpendsInfo(newList, index) {
-    var catName = newList.keys.elementAt(index);
-    var listOfExpends = newList.values.elementAt(index);
-    var sum = listOfExpends
-        .map((e) => double.parse(e.price))
-        .reduce((value, element) => value + element);
-    var result = {
-      "catName": catName,
-      "listOfExpends": listOfExpends,
-      "sum": sum
-    };
-    return result;
+    }).toList();
+    if (sort == 1) {
+      return rs
+        ..sort(
+            (a, b) => a["sum"].toString().compareTo(b["sum"].toString()));
+    }else if (sort == -1) {
+      return rs
+        ..sort(
+            (b, a) => a["sum"].toString().compareTo(b["sum"].toString()));
+    }
+    return rs;
   }
 
   Iterable<dynamic> searchBy(String query) {
