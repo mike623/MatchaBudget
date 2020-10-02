@@ -1,4 +1,5 @@
 import 'package:SimpleBudget/components/drawer.dart';
+import 'package:SimpleBudget/models/budget.dart';
 import 'package:SimpleBudget/models/expends.dart';
 import 'package:SimpleBudget/pages/search.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,9 @@ import 'const.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ExpendsAdapter());
+  Hive.registerAdapter(BudgetAdapter());
   await openExpends();
+  await openBudget();
   runApp(MyApp());
 }
 
@@ -23,9 +26,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         FutureProvider<Box>(create: (_) => openExpends()),
+        FutureProvider<Box<Budget>>(create: (_) => openBudget()),
         ProxyProvider<Box, ExpendsSrv>(
             update: (BuildContext context, Box box, ExpendsSrv expendsSrv) =>
                 ExpendsSrv(box)),
+        ProxyProvider<Box<Budget>, BudgetSrv>(
+            update: (BuildContext context, Box<Budget> box, BudgetSrv srv) =>
+                BudgetSrv(box)),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -50,6 +57,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    var budgetSrv = Provider.of<BudgetSrv>(context);
+    var expendsSrv = Provider.of<ExpendsSrv>(context);
+    var yearMonth = DateTime(DateTime.now().year, DateTime.now().month);
+    var allExp = expendsSrv.getAllExpendsByDateTime(yearMonth);
+    var info = budgetSrv.getBudgetInfo(yearMonth, allExp['sum']);
+    var budgetString = info['balance'].toString();
+    var allBudget = info['allBudget'].toString();
+    var percent = info['percent'];
+    var percentString = (info['percent'] * 100).toStringAsPrecision(4);
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: blue4,
@@ -76,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           )),
                       Container(
                           child: Text(
-                        "\$5,650",
+                        "\$$budgetString",
                         style: TextStyle(
                             fontStyle: FontStyle.normal,
                             color: Colors.white,
@@ -96,52 +112,59 @@ class _MyHomePageState extends State<MyHomePage> {
                 fit: StackFit.expand,
                 alignment: Alignment.bottomCenter,
                 children: [
-                  Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(35.0),
-                            topRight: Radius.circular(35.0)),
-                      ),
-                      margin: EdgeInsets.all(0),
-                      color: grey1,
-                      child: Column(
-                        children: [
-                          FractionallySizedBox(
-                            widthFactor: 0.8,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 30),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Text("Monthy Budget"),
-                                            Container(
-                                              child: Text("\$8000"),
-                                              margin: EdgeInsets.only(left: 5),
-                                            ),
-                                          ],
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context, builder: (_) => BudgetInputPopup());
+                    },
+                    child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(35.0),
+                              topRight: Radius.circular(35.0)),
+                        ),
+                        margin: EdgeInsets.all(0),
+                        color: grey1,
+                        child: Column(
+                          children: [
+                            FractionallySizedBox(
+                              widthFactor: 0.8,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 30),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Text("Monthy Budget"),
+                                              Container(
+                                                child: Text("\$$allBudget"),
+                                                margin:
+                                                    EdgeInsets.only(left: 5),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Text("65%"),
-                                    ],
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 10),
-                                    child: LinearProgressIndicator(
-                                      value: 0.8,
+                                        Text("$percentString%"),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                    Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      child: LinearProgressIndicator(
+                                        value: percent,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      )),
+                            )
+                          ],
+                        )),
+                  ),
                   ExpenseList()
                 ],
               ),
@@ -202,6 +225,61 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           },
         ));
+  }
+}
+
+class BudgetInputPopup extends StatefulWidget {
+  const BudgetInputPopup({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _BudgetInputPopupState createState() => _BudgetInputPopupState();
+}
+
+class _BudgetInputPopupState extends State<BudgetInputPopup> {
+  String price = "0";
+
+  DateTime yearMonth = DateTime(DateTime.now().year, DateTime.now().month);
+
+  @override
+  Widget build(BuildContext context) {
+    BudgetSrv srv = Provider.of<BudgetSrv>(context);
+    void onSubmit() {
+      var value = Budget(yearMonth, double.parse(price));
+      srv.putByMonth(yearMonth, value);
+      Navigator.pop(context, true);
+    }
+
+    return SimpleDialog(
+      title: Text(
+        "Your Budget",
+        style: TextStyle(fontSize: 20),
+      ),
+      contentPadding: EdgeInsets.all(10),
+      children: [
+        FractionallySizedBox(
+          widthFactor: 0.8,
+          child: TextField(
+              keyboardType: TextInputType.number,
+              onChanged: (v) {
+                setState(() {
+                  price = v;
+                });
+              },
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(prefix: Text("£"))),
+        ),
+        Container(height: 20),
+        FractionallySizedBox(
+          widthFactor: 0.5,
+          child: FlatButton(
+            onPressed: price != "" && int.parse(price) > 0 ? onSubmit : null,
+            child: Text("DONE"),
+          ),
+        )
+      ],
+    );
   }
 }
 

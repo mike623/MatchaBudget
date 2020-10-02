@@ -62,7 +62,7 @@ class ExpendsSrv {
     return newList;
   }
 
-  sumOfExpends(listOfExpends) {
+  double sumOfExpends(listOfExpends) {
     var sum = listOfExpends
         .map((e) => double.parse(e.price))
         .reduce((value, element) => value + element);
@@ -77,12 +77,10 @@ class ExpendsSrv {
     }).toList();
     if (sort == 1) {
       return rs
-        ..sort(
-            (a, b) => a["sum"].toString().compareTo(b["sum"].toString()));
-    }else if (sort == -1) {
+        ..sort((a, b) => a["sum"].toString().compareTo(b["sum"].toString()));
+    } else if (sort == -1) {
       return rs
-        ..sort(
-            (b, a) => a["sum"].toString().compareTo(b["sum"].toString()));
+        ..sort((b, a) => a["sum"].toString().compareTo(b["sum"].toString()));
     }
     return rs;
   }
@@ -91,5 +89,18 @@ class ExpendsSrv {
     var v = box.values;
     return v.where((element) => element.catName != null).where((element) =>
         RegExp(query).hasMatch(element.price.toString() + element.placeDesc));
+  }
+
+  getAllExpendsByDateTime(DateTime dateTime) {
+    var start = DateTime(dateTime.year, dateTime.month, 0);
+    var end = DateTime(dateTime.year, dateTime.month + 1, 1);
+    var listOfExpends = box.values.where((element) {
+      return element.date.isAfter(start) && element.date.isBefore(end);
+    });
+    return {
+      "dateTime": dateTime,
+      "sum": listOfExpends.length == 0 ? 0 : sumOfExpends(listOfExpends),
+      "listOfExpends": listOfExpends
+    };
   }
 }
