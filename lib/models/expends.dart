@@ -99,7 +99,7 @@ class ExpendsSrv {
     });
     return {
       "dateTime": dateTime,
-      "sum": listOfExpends.length == 0 ? 0 : sumOfExpends(listOfExpends),
+      "sum": listOfExpends.length == 0 ? 0.0 : sumOfExpends(listOfExpends),
       "listOfExpends": listOfExpends
     };
   }

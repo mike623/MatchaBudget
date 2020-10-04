@@ -1,6 +1,7 @@
 import 'package:SimpleBudget/models/budget.dart';
 import 'package:SimpleBudget/models/expends.dart';
 import 'package:SimpleBudget/models/index.dart';
+import 'package:SimpleBudget/models/view_state.dart';
 import 'package:SimpleBudget/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -25,6 +26,9 @@ class MyApp extends StatelessWidget {
         ProxyProvider<Box<Budget>, BudgetSrv>(
             update: (BuildContext context, Box<Budget> box, BudgetSrv srv) =>
                 BudgetSrv(box)),
+        ChangeNotifierProvider(
+          create: (_) => ViewModel(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

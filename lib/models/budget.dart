@@ -25,18 +25,21 @@ class BudgetSrv {
   BudgetSrv(this.box);
 
   Budget findByMonth(DateTime yearMonth) {
+    yearMonth = DateTime(yearMonth.year, yearMonth.month);
     return box.get(yearMonth.toString());
   }
 
   putByMonth(DateTime yearMonth, Budget value) {
+    yearMonth = DateTime(yearMonth.year, yearMonth.month);
     box.put(yearMonth.toString(), value);
   }
 
   getBudgetInfo(DateTime yearMonth, double expendsSum) {
-    var allBudget = findByMonth(yearMonth).currentBudget;
-    var budget = allBudget - expendsSum ?? 0;
+    var allBudget = findByMonth(yearMonth)?.currentBudget ?? 0.0;
+    var budget = allBudget - expendsSum ?? 0.0;
+    var per = (budget / allBudget);
     return {
-      "percent": (budget / allBudget),
+      "percent": per.isNaN ? 0.0 : per,
       "balance": budget,
       "allBudget": allBudget,
     };
