@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:SimpleBudget/components/drawer.dart';
 import 'package:SimpleBudget/models/budget.dart';
 import 'package:SimpleBudget/models/expends.dart';
@@ -49,35 +51,47 @@ class _MyHomePageState extends State<MyHomePage> {
         double percent = info['percent'];
         if (percent < 0) percent = 0;
         var percentString = (percent * 100).toStringAsPrecision(4);
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          backgroundColor: blue4,
-          appBar: buildAppBar(context),
-          body: Column(
-            children: [
-              MonthDisplayChanger(
-                budgetString: budgetString,
-                currentDateTime: viewState.cuurentDateTime,
-                onPrevMonthClick: viewState.prevMonth,
-                onNextMonthClick: viewState.nextMonth,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Stack(
-                    fit: StackFit.expand,
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      BudgetProgress(
-                          allBudget: allBudget,
-                          percentString: percentString,
-                          percent: percent),
-                      ExpenseList(yearMonth)
-                    ],
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                blue4,
+                blue2,
+              ],
+              begin: const FractionalOffset(0.0, 0.0),
+              end: const FractionalOffset(1.8, 0),
+            ),
+          ),
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: Colors.transparent,
+            appBar: buildAppBar(context),
+            body: Column(
+              children: [
+                MonthDisplayChanger(
+                  budgetString: budgetString,
+                  currentDateTime: viewState.cuurentDateTime,
+                  onPrevMonthClick: viewState.prevMonth,
+                  onNextMonthClick: viewState.nextMonth,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Stack(
+                      fit: StackFit.expand,
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        BudgetProgress(
+                            allBudget: allBudget,
+                            percentString: percentString,
+                            percent: percent),
+                        ExpenseList(yearMonth)
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
