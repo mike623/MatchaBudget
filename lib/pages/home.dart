@@ -33,8 +33,9 @@ class _MyHomePageState extends State<MyHomePage> {
         print(info);
         var budgetString = info['balance'].toString();
         var allBudget = info['allBudget'].toString();
-        var percent = info['percent'];
-        var percentString = (info['percent'] * 100).toStringAsPrecision(4);
+        double percent = info['percent'];
+        if(percent < 0) percent = 0;
+        var percentString = (percent * 100).toStringAsPrecision(4);
         return Scaffold(
           extendBodyBehindAppBar: true,
           backgroundColor: blue4,
