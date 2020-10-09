@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import '../components/expend_list_title.dart';
 
 class ExpenseList extends StatefulWidget {
-  const ExpenseList({
+  final yearMonth;
+
+  const ExpenseList(
+    this.yearMonth, {
     Key key,
   }) : super(key: key);
 
@@ -22,6 +25,7 @@ class _ExpenseListState extends State<ExpenseList> {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime yearMonth = widget.yearMonth;
     return Positioned(
       top: 90,
       left: 0,
@@ -72,7 +76,7 @@ class _ExpenseListState extends State<ExpenseList> {
                     valueListenable: listenExpend(),
                     builder: (context, box, widget) {
                       var srv = Provider.of<ExpendsSrv>(context);
-                      var ls = srv.getGroupExpends2(box, sort);
+                      var ls = srv.getGroupExpends2(yearMonth, sort);
                       return ListView.builder(
                         padding: EdgeInsets.zero,
                         itemCount: ls.length,

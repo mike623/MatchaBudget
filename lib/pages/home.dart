@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           allBudget: allBudget,
                           percentString: percentString,
                           percent: percent),
-                      ExpenseList()
+                      ExpenseList(yearMonth)
                     ],
                   ),
                 ),

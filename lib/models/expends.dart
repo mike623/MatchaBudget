@@ -34,6 +34,10 @@ class Expends {
         .add_jm()
         .format(this.date ??= DateTime.now());
   }
+
+  isInRange(start, end) {
+    return this.date.isAfter(start) && this.date.isBefore(end);
+  }
 }
 
 var addExpend = (id, Expends d) async {
@@ -67,13 +71,6 @@ class ExpendsSrv {
     print(box.values.toList());
   }
 
-  Map<dynamic, List<dynamic>> getGroupExpends(box) {
-    Map<dynamic, dynamic> raw = box.toMap();
-    var list = raw.values.toList().where((element) => element.catName != null);
-    var newList = groupBy(list, (obj) => obj.catName);
-    return newList;
-  }
-
   double sumOfExpends(listOfExpends) {
     var sum = listOfExpends
         .map((e) => double.parse(e.price))
@@ -81,8 +78,15 @@ class ExpendsSrv {
     return sum;
   }
 
-  List<Map<String, dynamic>> getGroupExpends2(box, int sort) {
-    var map = getGroupExpends(box);
+  List<Map<String, dynamic>> getGroupExpends2(DateTime yearMonth, int sort) {
+    final range = getMonthRange(yearMonth);
+    var start = range['start'];
+    var end = range['end'];
+    final filteredList =
+        box.values.where((element) => element.isInRange(start, end));
+    var list =
+        filteredList.toList().where((element) => element.catName != null);
+    var map = groupBy(list, (obj) => obj.catName);
     var rs = map.entries.map((e) {
       var sum = sumOfExpends(e.value);
       return {"catName": e.key, "listOfExpends": e.value, "sum": sum};
@@ -104,10 +108,11 @@ class ExpendsSrv {
   }
 
   getAllExpendsByDateTime(DateTime dateTime) {
-    var start = DateTime(dateTime.year, dateTime.month, 0);
-    var end = DateTime(dateTime.year, dateTime.month + 1, 1);
+    final range = getMonthRange(dateTime);
+    var start = range['start'];
+    var end = range['end'];
     var listOfExpends = box.values.where((element) {
-      return element.date.isAfter(start) && element.date.isBefore(end);
+      return element.isInRange(start, end);
     });
     return {
       "dateTime": dateTime,
@@ -126,5 +131,14 @@ class ExpendsSrv {
 
   remove(int id) {
     return box.delete(id);
+  }
+
+  Map getMonthRange(dateTime) {
+    var start = DateTime(dateTime.year, dateTime.month, 0);
+    var end = DateTime(dateTime.year, dateTime.month + 1, 1);
+    return {
+      "start": start,
+      "end": end,
+    };
   }
 }
