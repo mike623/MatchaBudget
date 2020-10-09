@@ -1,5 +1,6 @@
 import 'package:SimpleBudget/const.dart';
 import 'package:SimpleBudget/models/expends.dart';
+import 'package:SimpleBudget/pages/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,10 @@ class SearchPage extends SearchDelegate {
         Expends item = result.elementAt(index);
         return ListTile(
           dense: false,
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, '/detail',
+                arguments: {'expend': item});
+          },
           title: Text("£" + item.price.toString()),
           subtitle: Text(
             DateFormat.yMMMEd().format(item.date).toString() +
