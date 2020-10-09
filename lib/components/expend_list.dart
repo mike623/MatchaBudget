@@ -1,4 +1,5 @@
 import 'package:SimpleBudget/models/expends.dart';
+import 'package:SimpleBudget/pages/search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../components/expend_list_title.dart';
@@ -26,6 +27,7 @@ class _ExpenseListState extends State<ExpenseList> {
   @override
   Widget build(BuildContext context) {
     final DateTime yearMonth = widget.yearMonth;
+    var srv = Provider.of<ExpendsSrv>(context);
     return Positioned(
       top: 90,
       left: 0,
@@ -75,16 +77,23 @@ class _ExpenseListState extends State<ExpenseList> {
                   child: ValueListenableBuilder(
                     valueListenable: listenExpend(),
                     builder: (context, box, widget) {
-                      var srv = Provider.of<ExpendsSrv>(context);
                       var ls = srv.getGroupExpends2(yearMonth, sort);
                       return ListView.builder(
                         padding: EdgeInsets.zero,
                         itemCount: ls.length,
                         itemBuilder: (context, index) {
                           var catExpendsInfo = ls.elementAt(index);
-                          return ExpendListTitle(
-                            catName: catExpendsInfo["catName"],
-                            desc: catExpendsInfo["sum"].toString(),
+                          return InkWell(
+                            onTap: () {
+                              showSearch(
+                                  context: context,
+                                  delegate: SearchPage(
+                                      yearMonth, catExpendsInfo["catName"]));
+                            },
+                            child: ExpendListTitle(
+                              catName: catExpendsInfo["catName"],
+                              desc: catExpendsInfo["sum"].toString(),
+                            ),
                           );
                         },
                         // children: list,

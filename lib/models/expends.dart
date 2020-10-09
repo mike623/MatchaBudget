@@ -101,10 +101,16 @@ class ExpendsSrv {
     return rs;
   }
 
-  Iterable<dynamic> searchBy(String query) {
+  Iterable<dynamic> searchBy(String query, DateTime yearMonth, String cat) {
     var v = box.values;
-    return v.where((element) => element.catName != null).where((element) =>
-        RegExp(query).hasMatch(element.price.toString() + element.placeDesc));
+    var range = getMonthRange(yearMonth);
+    return v.where((element) => element.catName != null).where((element) {
+      var bool = true;
+      if (cat != null) bool &= element.catName == cat;
+      bool &= element.isInRange(range['start'], range['end']);
+      return bool &&
+          RegExp(query).hasMatch(element.price.toString() + element.placeDesc);
+    });
   }
 
   getAllExpendsByDateTime(DateTime dateTime) {

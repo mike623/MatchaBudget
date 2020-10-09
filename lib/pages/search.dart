@@ -6,6 +6,19 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends SearchDelegate {
+  DateTime yearMonth;
+  String catName;
+
+  SearchPage(this.yearMonth, [this.catName]);
+
+  @override
+  String get searchFieldLabel {
+    final dateString = DateFormat().add_yMMM().format(yearMonth);
+    return catName != null
+        ? "Search $catName in $dateString"
+        : "Search in $dateString";
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -29,7 +42,8 @@ class SearchPage extends SearchDelegate {
   }
 
   _buildResult(context) {
-    var result = Provider.of<ExpendsSrv>(context).searchBy(query);
+    var result =
+        Provider.of<ExpendsSrv>(context).searchBy(query, yearMonth, catName);
     return ListView.builder(
       itemCount: result.length,
       itemBuilder: (ctx, index) {

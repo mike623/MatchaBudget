@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
           ),
           onPressed: () {
-            showSearch(context: context, delegate: SearchPage());
+            showSearch(context: context, delegate: SearchPage(DateTime.now()));
           },
         ),
       ],
