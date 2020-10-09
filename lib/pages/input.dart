@@ -7,15 +7,18 @@ import 'package:intl/intl.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:provider/provider.dart';
 
 import '../const.dart';
 
 class SecondRoute extends StatefulWidget {
   final String cat;
 
+  final Map args;
+
   @override
   _SecondRouteState createState() => _SecondRouteState();
-  const SecondRoute({Key key, this.cat}) : super(key: key);
+  const SecondRoute({Key key, this.cat, this.args}) : super(key: key);
 }
 
 class _SecondRouteState extends State<SecondRoute> {
@@ -23,10 +26,11 @@ class _SecondRouteState extends State<SecondRoute> {
       new KeyboardVisibilityNotification();
   int _keyboardVisibilitySubscriberId;
   bool _keyboardState;
-
+  String cat;
   DateTime date = DateTime.now();
   String price;
   Prediction place;
+  Expends expend;
   void dateValueChange(DateTime datetime) {
     return setState(() {
       date = datetime;
@@ -66,13 +70,42 @@ class _SecondRouteState extends State<SecondRoute> {
         });
       },
     );
+
+    expend = widget.args['expend'];
+    if (expend != null) {
+      price = expend.price;
+      cat = expend.catName;
+      date = expend.date;
+      place = Prediction(expend.placeDesc, "", [], 0, expend.placeId, "", [],
+          [], StructuredFormatting("", [], ""));
+    } else {
+      cat = widget.args['cat'];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var expendsSrv = Provider.of<ExpendsSrv>(context);
     bool isValid = formValid();
     var dateString =
         new DateFormat.yMMMd().add_jm().format(date ??= DateTime.now());
+    void onSubmit(cat) {
+      if (expend != null) {
+        expend.date = date;
+        expend.price = price;
+        expend.placeId = place.placeId;
+        expend.catName = cat;
+        expend.placeDesc = place.description;
+        expendsSrv.updateExpend(expend.id, expend);
+      } else {
+        var id = expendsSrv.getNewId();
+        addExpend(id,
+            Expends(date, price, place.placeId, cat, place.description, id));
+      }
+
+      Navigator.popUntil(context, ModalRoute.withName('/'));
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -90,7 +123,7 @@ class _SecondRouteState extends State<SecondRoute> {
           Column(
             children: [
               Container(
-                child: getCatIconByName(widget.cat),
+                child: getCatIconByName(cat),
                 width: 100,
               ),
               Container(height: 15),
@@ -137,6 +170,7 @@ class _SecondRouteState extends State<SecondRoute> {
               FractionallySizedBox(
                 widthFactor: 0.6,
                 child: TextField(
+                  controller: TextEditingController(text: price),
                   onChanged: this.onPriceChanged,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -165,7 +199,7 @@ class _SecondRouteState extends State<SecondRoute> {
                 child: FlatButton(
                   color: blue4,
                   disabledColor: Colors.grey.shade300,
-                  onPressed: isValid ? this.onSubmit : null,
+                  onPressed: isValid ? () => onSubmit(cat) : null,
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -181,12 +215,6 @@ class _SecondRouteState extends State<SecondRoute> {
         ],
       )),
     );
-  }
-
-  void onSubmit() {
-    addExpend(
-        Expends(date, price, place.placeId, widget.cat, place.description));
-    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
   bool formValid() {
