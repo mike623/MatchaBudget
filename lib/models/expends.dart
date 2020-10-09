@@ -6,7 +6,8 @@ part 'expends.g.dart';
 
 @HiveType(typeId: 1)
 class Expends {
-  Expends(this.date, this.price, this.placeId, this.catName, this.placeDesc);
+  Expends(this.date, this.price, this.placeId, this.catName, this.placeDesc,
+      this.id);
 
   @HiveField(0)
   DateTime date;
@@ -22,11 +23,14 @@ class Expends {
 
   @HiveField(4)
   String placeDesc;
+
+  @HiveField(5)
+  int id;
 }
 
-var addExpend = (Expends d) async {
+var addExpend = (id, Expends d) async {
   var expends = await Hive.openBox('expends');
-  expends.add(d);
+  expends.put(id, d);
 };
 
 var listExpend = () async {
@@ -102,5 +106,13 @@ class ExpendsSrv {
       "sum": listOfExpends.length == 0 ? 0.0 : sumOfExpends(listOfExpends),
       "listOfExpends": listOfExpends
     };
+  }
+
+  updateExpend(id, Expends expend) {
+    return box.put(id, expend);
+  }
+
+  getNewId() {
+    return box.values.length + 1;
   }
 }
