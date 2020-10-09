@@ -16,7 +16,7 @@ class SearchPage extends SearchDelegate {
     final dateString = DateFormat().add_yMMM().format(yearMonth);
     return catName != null
         ? "Search $catName in $dateString"
-        : "Search in $dateString";
+        : "Search by address or price";
   }
 
   @override
