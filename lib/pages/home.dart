@@ -34,13 +34,12 @@ class _MyHomePageState extends State<MyHomePage> {
         var budgetString = info['balance'].toString();
         var allBudget = info['allBudget'].toString();
         double percent = info['percent'];
-        if(percent < 0) percent = 0;
+        if (percent < 0) percent = 0;
         var percentString = (percent * 100).toStringAsPrecision(4);
         return Scaffold(
           extendBodyBehindAppBar: true,
           backgroundColor: blue4,
           appBar: buildAppBar(context),
-          drawer: MyDrawer(),
           body: Column(
             children: [
               MonthDisplayChanger(
@@ -74,54 +73,42 @@ class _MyHomePageState extends State<MyHomePage> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            widget.title,
-            style: TextStyle(color: Colors.white),
-          ),
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          widget.title,
+          style: TextStyle(color: Colors.white),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.add,
-            ),
-            onPressed: () {
-              Navigator.of(context).push(new MaterialPageRoute<Null>(
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      insetPadding: EdgeInsets.zero,
-                      child: CatRoute(),
-                    );
-                  },
-                  fullscreenDialog: true));
-            },
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.add,
           ),
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              showSearch(context: context, delegate: SearchPage());
-            },
-          ),
-        ],
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(
-                Icons.menu,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
+          onPressed: () {
+            Navigator.of(context).push(new MaterialPageRoute<Null>(
+                builder: (BuildContext context) {
+                  return Dialog(
+                    insetPadding: EdgeInsets.zero,
+                    child: CatRoute(),
+                  );
+                },
+                fullscreenDialog: true));
           },
-        ));
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            showSearch(context: context, delegate: SearchPage());
+          },
+        ),
+      ],
+    );
   }
 }
 
@@ -201,7 +188,8 @@ class MonthDisplayChanger extends StatelessWidget {
     Key key,
     @required this.budgetString,
     @required this.onPrevMonthClick,
-    this.currentDateTime, this.onNextMonthClick,
+    this.currentDateTime,
+    this.onNextMonthClick,
   }) : super(key: key);
 
   final String budgetString;
