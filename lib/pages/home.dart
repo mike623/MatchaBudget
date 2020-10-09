@@ -22,6 +22,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    // TODO: improve for performance
+    return ValueListenableBuilder(
+      valueListenable: listenExpend(),
+      builder: (ctx, value, _) {
+        return buildMain();
+      },
+    );
+  }
+
+  Consumer<ViewModel> buildMain() {
     return Consumer<ViewModel>(
       builder: (context, viewState, child) {
         var budgetSrv = Provider.of<BudgetSrv>(context);
