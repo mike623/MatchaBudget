@@ -29,6 +29,10 @@ class BudgetSrv {
     return box.get(yearMonth.toString());
   }
 
+  listen() {
+    return box.listenable();
+  }
+
   putByMonth(DateTime yearMonth, Budget value) {
     yearMonth = DateTime(yearMonth.year, yearMonth.month);
     box.put(yearMonth.toString(), value);

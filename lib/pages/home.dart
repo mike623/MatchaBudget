@@ -22,13 +22,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final budgetSrv = Provider.of<BudgetSrv>(context);
     // TODO: improve for performance
     return ValueListenableBuilder(
-      valueListenable: listenExpend(),
-      builder: (ctx, value, _) {
-        return buildMain();
-      },
-    );
+        valueListenable: budgetSrv.listen(),
+        builder: (ctx, value, _) {
+          return ValueListenableBuilder(
+            valueListenable: listenExpend(),
+            builder: (ctx, value, _) {
+              return buildMain();
+            },
+          );
+        });
   }
 
   Consumer<ViewModel> buildMain() {
