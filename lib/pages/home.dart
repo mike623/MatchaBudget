@@ -161,9 +161,21 @@ class BudgetProgress extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text("Monthy Budget"),
-                                Container(
-                                  child: Text("\$$allBudget"),
-                                  margin: EdgeInsets.only(left: 5),
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Text("\$$allBudget"),
+                                      margin: EdgeInsets.only(left: 5),
+                                    ),
+                                    Container(
+                                      width: 5,
+                                    ),
+                                    Icon(
+                                      Icons.edit,
+                                      size: 14,
+                                      color: Colors.black45,
+                                    )
+                                  ],
                                 ),
                               ],
                             ),

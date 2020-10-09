@@ -35,10 +35,10 @@ class _BudgetInputPopupState extends State<BudgetInputPopup> {
         FractionallySizedBox(
           widthFactor: 0.8,
           child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (v) {
                 setState(() {
-                  price = v;
+                  price = double.parse(v).toString();
                 });
               },
               textAlign: TextAlign.center,
@@ -48,7 +48,8 @@ class _BudgetInputPopupState extends State<BudgetInputPopup> {
         FractionallySizedBox(
           widthFactor: 0.5,
           child: FlatButton(
-            onPressed: price != "" && int.parse(price) > 0 ? onSubmit : null,
+            onPressed:
+                price != "" && double.parse(price) > 0.0 ? onSubmit : null,
             child: Text("DONE"),
           ),
         )
