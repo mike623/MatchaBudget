@@ -2,6 +2,7 @@ import 'package:SimpleBudget/models/expends.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import '../const.dart';
 
@@ -33,7 +34,12 @@ class DetailPage extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-              icon: Icon(Icons.share, color: Colors.black54), onPressed: null),
+              icon: Icon(Icons.share, color: Colors.black54),
+              onPressed: () async {
+                var shareText =
+                    "Spend £${item.price} on ${item.getFormattedDate()} at ${item.placeDesc}";
+                await Share.share(shareText);
+              }),
           NavPopUp(item: item, onDelete: onDelete),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 part 'expends.g.dart';
 
@@ -26,6 +27,13 @@ class Expends {
 
   @HiveField(5)
   int id;
+
+  getFormattedDate() {
+    return new DateFormat()
+        .add_yMMMd()
+        .add_jm()
+        .format(this.date ??= DateTime.now());
+  }
 }
 
 var addExpend = (id, Expends d) async {
