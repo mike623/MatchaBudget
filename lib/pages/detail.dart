@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 import '../const.dart';
 
 class DetailPage extends StatelessWidget {
+  Map args;
+
+  DetailPage({this.args});
   void onEditClick() {}
   @override
   Widget build(BuildContext context) {
-    Map args = ModalRoute.of(context).settings.arguments;
     Expends item = args['expend'];
     var dateString =
         new DateFormat.yMMMd().add_jm().format(item.date ??= DateTime.now());
