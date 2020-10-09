@@ -115,4 +115,8 @@ class ExpendsSrv {
   getNewId() {
     return box.values.length + 1;
   }
+
+  remove(int id) {
+    return box.delete(id);
+  }
 }

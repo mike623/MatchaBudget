@@ -17,6 +17,7 @@ const randc3 = const Color(0xff6e39fb);
 const randc4 = const Color(0xffcf39fb);
 const randc5 = const Color(0xfffb39c6);
 const randc6 = const Color(0xfffb3965);
+const red = const Color(0xfffb3965);
 
 const CAT_SHOPPING = CatIconText(
   name: 'Shopping',
