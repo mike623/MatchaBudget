@@ -109,7 +109,7 @@ class ExpendsSrv {
       if (cat != null) bool &= element.catName == cat;
       bool &= element.isInRange(range['start'], range['end']);
       return bool &&
-          RegExp(query).hasMatch(element.price.toString() + element.placeDesc);
+          RegExp(query, caseSensitive: false).hasMatch(element.price.toString() + element.placeDesc);
     });
   }
 
