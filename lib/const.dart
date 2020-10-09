@@ -25,7 +25,7 @@ const CAT_SHOPPING = CatIconText(
   bgColor: randc1,
 );
 const CAT_EAT = CatIconText(
-  name: 'Eat',
+  name: 'Food',
   icon: Icons.fastfood,
   bgColor: randc2,
 );
