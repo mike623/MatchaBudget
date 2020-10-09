@@ -2,7 +2,9 @@ import 'package:SimpleBudget/models/budget.dart';
 import 'package:SimpleBudget/models/expends.dart';
 import 'package:SimpleBudget/models/index.dart';
 import 'package:SimpleBudget/models/view_state.dart';
+import 'package:SimpleBudget/pages/detail.dart';
 import 'package:SimpleBudget/pages/home.dart';
+import 'package:SimpleBudget/pages/input.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,14 @@ class MyApp extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
             fontFamily: "Nunito"),
         home: MyHomePage(title: 'Hello!'),
+        onGenerateRoute: (RouteSettings settings) {
+          var routes = <String, WidgetBuilder>{
+            "/detail": (_) => DetailPage(args: settings.arguments),
+            "/edit": (_) => SecondRoute(args: settings.arguments),
+          };
+          WidgetBuilder builder = routes[settings.name];
+          return MaterialPageRoute(builder: (ctx) => builder(ctx));
+        },
       ),
     );
   }
