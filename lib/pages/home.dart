@@ -27,10 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
         var budgetSrv = Provider.of<BudgetSrv>(context);
         var expendsSrv = Provider.of<ExpendsSrv>(context);
         var yearMonth = viewState.cuurentDateTime;
-        print(yearMonth);
         var allExp = expendsSrv.getAllExpendsByDateTime(yearMonth);
         var info = budgetSrv.getBudgetInfo(yearMonth, allExp['sum']);
-        print(info);
         var budgetString = info['balance'].toString();
         var allBudget = info['allBudget'].toString();
         double percent = info['percent'];
