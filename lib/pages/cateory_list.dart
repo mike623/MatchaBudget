@@ -52,15 +52,7 @@ class CatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onPress(catName) {
-      print(catName);
-      Navigator.of(context).push(new MaterialPageRoute<Null>(
-          builder: (BuildContext context) {
-            return Dialog(
-              insetPadding: EdgeInsets.zero,
-              child: SecondRoute(cat: catName),
-            );
-          },
-          fullscreenDialog: true));
+      Navigator.of(context).pushNamed('/edit', arguments: {'cat': catName});
     }
 
     return Expanded(
