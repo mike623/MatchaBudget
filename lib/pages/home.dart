@@ -55,11 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                blue4,
                 blue2,
+                blue4,
               ],
-              begin: const FractionalOffset(0.0, 0.0),
-              end: const FractionalOffset(1.8, 0),
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
             ),
           ),
           child: Scaffold(
