@@ -25,6 +25,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final budgetSrv = Provider.of<BudgetSrv>(context);
+    final expendSrv = Provider.of<ExpendsSrv>(context);
+    if (!budgetSrv.isReady()) return Container();
+    if (!expendSrv.isReady()) return Container();
     // TODO: improve for performance
     return ValueListenableBuilder(
         valueListenable: budgetSrv.listen(),
