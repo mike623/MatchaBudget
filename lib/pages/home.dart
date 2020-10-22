@@ -259,7 +259,7 @@ class MonthDisplayChanger extends StatelessWidget {
                       ),
                       Container(
                           child: Text(
-                        "\$$budgetString",
+                        "£$budgetString",
                         style: TextStyle(
                             fontStyle: FontStyle.normal,
                             color: Colors.white,
