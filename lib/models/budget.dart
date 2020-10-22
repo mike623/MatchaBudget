@@ -29,6 +29,10 @@ class BudgetSrv {
     return box.get(yearMonth.toString());
   }
 
+  isReady() {
+    return box != null && box.isOpen;
+  }
+
   listen() {
     return box.listenable();
   }

@@ -71,6 +71,10 @@ class ExpendsSrv {
     print(box.values.toList());
   }
 
+  isReady() {
+    return this.box != null && box.isOpen;
+  }
+
   double sumOfExpends(listOfExpends) {
     var sum = listOfExpends
         .map((e) => double.parse(e.price))
@@ -109,7 +113,8 @@ class ExpendsSrv {
       if (cat != null) bool &= element.catName == cat;
       bool &= element.isInRange(range['start'], range['end']);
       return bool &&
-          RegExp(query, caseSensitive: false).hasMatch(element.price.toString() + element.placeDesc);
+          RegExp(query, caseSensitive: false)
+              .hasMatch(element.price.toString() + element.placeDesc);
     });
   }
 
