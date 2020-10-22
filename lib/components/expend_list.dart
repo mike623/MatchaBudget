@@ -78,28 +78,64 @@ class _ExpenseListState extends State<ExpenseList> {
                     valueListenable: listenExpend(),
                     builder: (context, box, widget) {
                       var ls = srv.getGroupExpends2(yearMonth, sort);
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: ls.length,
-                        itemBuilder: (context, index) {
-                          var catExpendsInfo = ls.elementAt(index);
-                          return InkWell(
-                            onTap: () {
-                              showSearch(
-                                  context: context,
-                                  delegate: SearchPage(
-                                      yearMonth, catExpendsInfo["catName"]));
-                            },
-                            child: ExpendListTitle(
-                              catName: catExpendsInfo["catName"],
-                              desc: catExpendsInfo["sum"].toString(),
-                            ),
-                          );
-                        },
-                        // children: list,
-                      );
+                      return ls.isEmpty
+                          ? ListEmptyView()
+                          : ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: ls.length,
+                              itemBuilder: (context, index) {
+                                var catExpendsInfo = ls.elementAt(index);
+                                return InkWell(
+                                  onTap: () {
+                                    showSearch(
+                                        context: context,
+                                        delegate: SearchPage(yearMonth,
+                                            catExpendsInfo["catName"]));
+                                  },
+                                  child: ExpendListTitle(
+                                    catName: catExpendsInfo["catName"],
+                                    desc: catExpendsInfo["sum"].toString(),
+                                  ),
+                                );
+                              },
+                              // children: list,
+                            );
                     },
                   ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ListEmptyView extends StatelessWidget {
+  const ListEmptyView({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        child: IntrinsicHeight(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed('/add_new');
+            },
+            child: Column(
+              children: [
+                Icon(
+                  Icons.attach_money,
+                  size: 40,
+                  color: Colors.black12,
+                ),
+                Text(
+                  "Add some expends",
+                  style: TextStyle(fontSize: 40, color: Colors.black12),
                 )
               ],
             ),

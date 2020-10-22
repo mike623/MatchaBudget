@@ -2,6 +2,7 @@ import 'package:SimpleBudget/models/budget.dart';
 import 'package:SimpleBudget/models/expends.dart';
 import 'package:SimpleBudget/models/index.dart';
 import 'package:SimpleBudget/models/view_state.dart';
+import 'package:SimpleBudget/pages/cateory_list.dart';
 import 'package:SimpleBudget/pages/detail.dart';
 import 'package:SimpleBudget/pages/home.dart';
 import 'package:SimpleBudget/pages/input.dart';
@@ -43,8 +44,16 @@ class MyApp extends StatelessWidget {
           var routes = <String, WidgetBuilder>{
             "/detail": (_) => DetailPage(args: settings.arguments),
             "/edit": (_) => SecondRoute(args: settings.arguments),
+            "/add_new": (_) => Dialog(
+                  insetPadding: EdgeInsets.zero,
+                  child: CatRoute(),
+                ),
           };
           WidgetBuilder builder = routes[settings.name];
+          if (settings.name == '/add_new') {
+            return MaterialPageRoute(
+                builder: (ctx) => builder(ctx), fullscreenDialog: true);
+          }
           return MaterialPageRoute(builder: (ctx) => builder(ctx));
         },
       ),

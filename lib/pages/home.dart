@@ -115,14 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Icons.add,
           ),
           onPressed: () {
-            Navigator.of(context).push(new MaterialPageRoute<Null>(
-                builder: (BuildContext context) {
-                  return Dialog(
-                    insetPadding: EdgeInsets.zero,
-                    child: CatRoute(),
-                  );
-                },
-                fullscreenDialog: true));
+            Navigator.of(context).pushNamed('/add_new');
           },
         ),
         IconButton(
