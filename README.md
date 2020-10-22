@@ -1,6 +1,12 @@
-# SimpleBudget
+# Matcha Budget
 
-A new Flutter project.
+Simple Budget App write by Flutter
+
+## Screenshot
+<img src="./assets/screenshots/home.png" alt="drawing" width="100"/>
+<img src="./assets/screenshots/search.png" alt="drawing" width="100"/>
+<img src="./assets/screenshots/detail.png" alt="drawing" width="100"/>
+<img src="./assets/screenshots/cat.png" alt="drawing" width="100"/>
 
 ## Getting Started
 
